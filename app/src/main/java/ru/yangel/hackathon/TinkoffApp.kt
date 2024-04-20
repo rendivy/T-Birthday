@@ -6,7 +6,10 @@ import android.app.NotificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
-import ru.yangel.hackathon.wishlist.item.di.providePresentationModule
+import ru.yangel.hackathon.auth.di.provideAuthNetworkModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemDomainModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemPresentationModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemNetworkModule
 
 class TinkoffApp : Application(), KoinComponent {
 
@@ -16,7 +19,10 @@ class TinkoffApp : Application(), KoinComponent {
         startKoin {
             androidContext(this@TinkoffApp)
             modules(
-                providePresentationModule()
+                provideWishlistItemPresentationModule(),
+                provideAuthNetworkModule(),
+                provideWishlistItemNetworkModule(),
+                provideWishlistItemDomainModule()
             )
         }
     }
