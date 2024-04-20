@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.yangel.hackathon.R
+import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.ui.theme.Primary
 
 
@@ -33,7 +34,6 @@ fun OnBoardingScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clickable { navController.navigate("bottomNavigation")}
             .background(Primary),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -57,7 +57,7 @@ fun OnBoardingScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
-                .clickable {},
+                .noRippleClickable { navController.navigate("bottomNavigation") },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {

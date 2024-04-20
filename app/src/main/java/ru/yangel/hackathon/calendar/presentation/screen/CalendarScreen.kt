@@ -1,146 +1,104 @@
 package ru.yangel.hackathon.calendar.presentation.screen
 
-import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.kizitonwose.calendar.core.DayPosition
-import ru.yangel.hackathon.R
-import ru.yangel.hackathon.calendar.presentation.screen.components.Calendar
-import ru.yangel.hackathon.calendar.presentation.screen.samples.CalendarSamples
-import ru.yangel.hackathon.navigation.utils.noRippleClickable
-import ru.yangel.hackathon.ui.common.PrimaryButton
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
+import ru.yangel.hackathon.calendar.presentation.screen.components.CalendarContent
+import ru.yangel.hackathon.calendar.presentation.state.CalendarUiState
+import ru.yangel.hackathon.calendar.presentation.viewmodel.CalendarViewModel
+import ru.yangel.hackathon.follows.presentation.ui.component.UserCard
+import ru.yangel.hackathon.ui.common.ErrorContent
+import ru.yangel.hackathon.ui.common.LoadingContent
 import ru.yangel.hackathon.ui.theme.CodGray
-import ru.yangel.hackathon.ui.theme.Nevada
 import ru.yangel.hackathon.ui.theme.PaddingMedium
 import ru.yangel.hackathon.ui.theme.PaddingRegular
 import ru.yangel.hackathon.ui.theme.PaddingSmall
-import ru.yangel.hackathon.ui.theme.Type13
+import ru.yangel.hackathon.ui.theme.Type20
 import ru.yangel.hackathon.ui.theme.Type24
 import ru.yangel.hackathon.ui.theme.White
-import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: CalendarViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
-    val birthdays = remember {
-        mutableStateListOf(
-            com.kizitonwose.calendar.core.CalendarDay(
-                date = LocalDate.now().minusDays(15),
-                position = DayPosition.MonthDate
-            ),
-            com.kizitonwose.calendar.core.CalendarDay(
-                date = LocalDate.now().minusDays(9),
-                position = DayPosition.MonthDate
-            ),
-            com.kizitonwose.calendar.core.CalendarDay(
-                date = LocalDate.now().plusDays(2),
-                position = DayPosition.MonthDate
-            ),
-            com.kizitonwose.calendar.core.CalendarDay(
-                date = LocalDate.now().plusDays(4),
-                position = DayPosition.MonthDate
-            ),
-        )
+    val state by viewModel.calendarUiState.collectAsStateWithLifecycle()
+    val calendarBottomSheetState by viewModel.sheetState.collectAsStateWithLifecycle()
+    val sheetState = rememberModalBottomSheetState()
+
+    when (state) {
+        CalendarUiState.Initial -> Unit
+        CalendarUiState.Loading -> LoadingContent()
+        CalendarUiState.Error -> ErrorContent()
+        is CalendarUiState.Content -> {
+            val birthdays = (state as CalendarUiState.Content).birthdays.map {
+                it.calendarDay
+            }
+            CalendarContent(
+                birthdays = birthdays,
+                onBirthdayClick = viewModel::onBirthdayClick,
+                modifier = modifier
+            )
+        }
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(White)
-            .padding(
-                horizontal = PaddingMedium,
-                vertical = PaddingRegular
-            ),
-        verticalArrangement = Arrangement.spacedBy(PaddingRegular)
-    ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Ваш календарь",
-                    color = CodGray,
-                    style = Type24
-                )
-
-                Icon(
-                    modifier = Modifier.noRippleClickable { /* TODO navigate to settings*/ },
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_settings),
-                    tint = Nevada,
-                    contentDescription = null
-                )
-            }
-
-            Spacer(modifier = Modifier.height(PaddingSmall))
-
-            Text(
-                text = "Здесь отображаются дни рождения ваших коллег",
-                color = Nevada,
-                style = Type13
-            )
-        }
-
-        Calendar(
-            birthdays = birthdays,
-            onBirthdayClick = {
-                // TODO invoke vm method, open bottom sheet
-            }
-        )
-
-        CalendarSamples()
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+    if (calendarBottomSheetState.isShown) {
+        ModalBottomSheet(
+            containerColor = White,
+            sheetState = sheetState,
+            onDismissRequest = viewModel::onDismissBottomSheet
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_info),
-                tint = Nevada,
-                contentDescription = null
-            )
+            Column(
+                modifier = Modifier.padding(horizontal = PaddingMedium)
+            ) {
+                Spacer(modifier = Modifier.height(PaddingSmall))
 
-            Spacer(modifier = Modifier.width(PaddingSmall))
+                Text(
+                    text = calendarBottomSheetState.date ?: "",
+                    style = Type24,
+                    color = CodGray
+                )
 
-            Text(
-                text = "Нажмите на день, чтобы посмотреть, у кого из коллег день рождения",
-                color = Nevada,
-                style = Type13
-            )
-        }
-        
-        PrimaryButton(
-            text = "Экспортировать в календарь",
-            onClick = {
-                Toast.makeText(
-                    context,
-                    "Функционал появится позже!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Spacer(modifier = Modifier.height(PaddingRegular))
+
+                Text(
+                    text = "Дни рождения:",
+                    style = Type20,
+                    color = CodGray
+                )
+
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(PaddingSmall)
+                ) {
+                    items(calendarBottomSheetState.birthdays) { birthday ->
+                        UserCard(
+                            userName = birthday.fullName,
+                            photoUrl = birthday.photoUrl,
+                            onClick = {
+                                // TODO navigate to profile (pass id)
+                            }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(PaddingMedium))
             }
-        )
+        }
     }
 }
 
