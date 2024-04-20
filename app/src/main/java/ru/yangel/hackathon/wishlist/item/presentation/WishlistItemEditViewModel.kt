@@ -92,7 +92,7 @@ class WishlistItemEditViewModel(
 
     fun submit() {
         _state.value = WishlistItemEditState.Loading
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val content = _content.value
             if (itemId.isBlank()) {
                 wishlistItemRepository.uploadItem(

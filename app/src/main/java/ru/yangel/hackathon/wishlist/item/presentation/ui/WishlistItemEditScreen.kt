@@ -55,7 +55,7 @@ import ru.yangel.hackathon.wishlist.item.presentation.state.WishlistItemEditStat
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WishlistItemEditScreen(
-    itemId: String = "ce5546ed-d982-466d-a1ba-07d702381637", onSuccess: () -> Unit = {}
+    itemId: String = "", onSuccess: () -> Unit = {}
 ) {
     val viewModel: WishlistItemEditViewModel = koinViewModel {
         parametersOf(itemId)
@@ -113,7 +113,7 @@ fun WishlistItemEditScreen(
                                             viewModel.deletedPhotoIds.add(existingImages[it].id)
                                             viewModel.existingImages.removeAt(it)
                                         }),
-                                    painter = rememberAsyncImagePainter(model = existingImages[it]),
+                                    painter = rememberAsyncImagePainter(model = existingImages[it].link),
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop
                                 )
