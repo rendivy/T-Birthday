@@ -5,7 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +36,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.yangel.hackathon.R
@@ -46,6 +46,7 @@ import ru.yangel.hackathon.ui.common.ErrorContent
 import ru.yangel.hackathon.ui.common.LoadingContent
 import ru.yangel.hackathon.ui.common.ObserveAsEvents
 import ru.yangel.hackathon.ui.common.PrimaryButton
+import ru.yangel.hackathon.ui.theme.AliceBlue
 import ru.yangel.hackathon.ui.theme.CodGray
 import ru.yangel.hackathon.ui.theme.PaddingMedium
 import ru.yangel.hackathon.ui.theme.Primary
@@ -55,7 +56,7 @@ import ru.yangel.hackathon.wishlist.item.presentation.state.WishlistItemEditStat
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WishlistItemEditScreen(
-    itemId: String = "", onSuccess: () -> Unit = {}
+    itemId: String = "", onSuccess: () -> Unit = {}, onBack: () -> Unit = {}
 ) {
     val viewModel: WishlistItemEditViewModel = koinViewModel {
         parametersOf(itemId)
@@ -63,11 +64,11 @@ fun WishlistItemEditScreen(
     ObserveAsEvents(flow = viewModel.successEvents) { onSuccess() }
     val imageUris = remember { viewModel.imageUris }
     val existingImages = remember { viewModel.existingImages }
-    val addLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetMultipleContents(),
-        onResult = { uri: List<Uri> ->
-            imageUris.addAll(uri)
-        })
+    val addLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetMultipleContents(),
+            onResult = { uri: List<Uri> ->
+                imageUris.addAll(uri)
+            })
     val content by remember { viewModel.content }
     val screenState by remember { viewModel.state }
     val isDataCorrectlyFilled by remember { viewModel.canSubmit }
@@ -99,38 +100,40 @@ fun WishlistItemEditScreen(
                         AppTopBar(
                             modifier = Modifier.padding(
                                 vertical = 24.dp, horizontal = PaddingMedium
-                            )
-                        ) {}
+                            ), onIconClick = onBack
+                        )
                         LazyRow(contentPadding = PaddingValues(horizontal = PaddingMedium)) {
                             items(count = existingImages.size) {
-                                Image(
+                                SubcomposeAsyncImage(
                                     modifier = Modifier
                                         .size(120.dp)
                                         .aspectRatio(1f)
                                         .padding(end = 10.dp)
                                         .clip(RoundedCornerShape(8.dp))
+                                        .background(AliceBlue)
                                         .combinedClickable(onClick = {}, onLongClick = {
                                             viewModel.deletedPhotoIds.add(existingImages[it].id)
                                             viewModel.existingImages.removeAt(it)
                                         }),
-                                    painter = rememberAsyncImagePainter(model = existingImages[it].link),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop
+                                    contentScale = ContentScale.Crop,
+                                    model = existingImages[it].link,
+                                    contentDescription = null
                                 )
                             }
                             items(count = imageUris.size) {
-                                Image(
+                                SubcomposeAsyncImage(
                                     modifier = Modifier
                                         .size(120.dp)
                                         .aspectRatio(1f)
                                         .padding(end = 10.dp)
                                         .clip(RoundedCornerShape(8.dp))
+                                        .background(AliceBlue)
                                         .combinedClickable(onClick = {}, onLongClick = {
                                             viewModel.imageUris.removeAt(it)
                                         }),
-                                    painter = rememberAsyncImagePainter(model = imageUris[it]),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop
+                                    contentScale = ContentScale.Crop,
+                                    model = imageUris[it],
+                                    contentDescription = null
                                 )
                             }
                         }

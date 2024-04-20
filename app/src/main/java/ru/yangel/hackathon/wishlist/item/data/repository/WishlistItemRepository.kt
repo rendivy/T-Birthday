@@ -80,6 +80,10 @@ class WishlistItemRepository(
         }
     }
 
+    suspend fun getMyWishlist() = apiService.getMyWishlist().items
+
+    suspend fun getWishlist(userId: String) = apiService.getWishlist(userId).items
+
     suspend fun getItem(id: String) = apiService.getWishlistItem(id)
 
     private fun Uri.createTempFile(): File {

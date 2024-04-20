@@ -34,14 +34,14 @@ import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.profile.presentation.ProfileScreen
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.SuvaGray
+import ru.yangel.hackathon.wishlist.list.presentation.ui.OwnWishListScreen
 
 sealed class BottomBarRoutes(
     val route: String,
     val icon: Int,
 ) {
     data object Calendar : BottomBarRoutes(
-        route = "calendar",
-        icon = R.drawable.calendar_icon
+        route = "calendar", icon = R.drawable.calendar_icon
     )
 
     data object WishList : BottomBarRoutes(
@@ -91,14 +91,11 @@ fun BottomBar(navController: NavHostController) {
 
 @Composable
 fun RowScope.AddItem(
-    screen: BottomBarRoutes,
-    currentDestination: NavDestination?,
-    navController: NavHostController
+    screen: BottomBarRoutes, currentDestination: NavDestination?, navController: NavHostController
 ) {
     val color = if (currentDestination?.route == screen.route) Primary else SuvaGray
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .weight(1f)
@@ -120,7 +117,9 @@ fun RowScope.AddItem(
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    rootNavController: NavHostController
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -133,6 +132,7 @@ fun MainScreen() {
     ) {
         BottomNavigation(
             bottomNavigationNavController = navController,
+            rootNavController = rootNavController,
             modifier = Modifier.padding(it)
         )
     }
@@ -142,6 +142,7 @@ fun MainScreen() {
 @Composable
 fun BottomNavigation(
     bottomNavigationNavController: NavHostController,
+    rootNavController: NavHostController,
     modifier: Modifier,
 ) {
     NavHost(
@@ -162,7 +163,11 @@ fun BottomNavigation(
             CalendarScreen()
         }
         composable("whishlist") {
-            WhishListScreen()
+            OwnWishListScreen(onItemClick = {
+                rootNavController.navigate("itemView/$it")
+            }, onAddClick = {
+                rootNavController.navigate("itemCreate")
+            })
         }
         composable("search") {
             SearchScreen(rootNavController = bottomNavigationNavController)
