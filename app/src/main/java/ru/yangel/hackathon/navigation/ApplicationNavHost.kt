@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen.MainScreen
 import ru.yangel.hackathon.onBoarding.presentation.ui.OnBoardingScreen
+import ru.yangel.hackathon.profile.presentation.ProfileScreen
 import ru.yangel.hackathon.splash.presentation.ui.screen.SplashScreen
 import ru.yangel.hackathon.wishlist.item.presentation.ui.WishlistItemEditScreen
 import ru.yangel.hackathon.wishlist.item.presentation.ui.WishlistItemScreen
@@ -39,6 +40,15 @@ fun ApplicationNavHost() {
         composable("itemView/{itemId}", arguments = listOf(navArgument("itemId") { type = NavType.StringType })) {
             val itemId = it.arguments?.getString("itemId") ?: ""
             WishlistItemScreen(itemId = itemId, onBack = navController::popBackStack, onNavigateToEdit = { navController.navigate("itemEdit/$itemId") })
+        }
+        composable(
+            route = "profileDetails/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ProfileScreen(
+                navController = navController,
+                userId = backStackEntry.arguments?.getString("id").toString(),
+            )
         }
     }
 

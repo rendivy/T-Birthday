@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -77,7 +78,7 @@ fun WishlistItemScreen(
             is WishlistItemState.Loading -> LoadingContent()
             is WishlistItemState.Error -> ErrorContent(onRetry = viewModel::reload)
             is WishlistItemState.Content -> {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
                     if (isFromOwnWishlist) {
                         FloatingActionButton(
                             modifier = Modifier

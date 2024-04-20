@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -77,7 +78,7 @@ fun WishlistItemEditScreen(
         when (state) {
             WishlistItemEditState.Loading -> LoadingContent()
             WishlistItemEditState.Content -> {
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
                     FloatingActionButton(modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .alpha(if (isDataCorrectlyFilled) 1f else 0.5f)

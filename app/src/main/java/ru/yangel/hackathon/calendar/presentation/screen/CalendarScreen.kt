@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.calendar.presentation.screen.components.CalendarContent
@@ -35,7 +36,8 @@ import ru.yangel.hackathon.ui.theme.White
 @Composable
 fun CalendarScreen(
     modifier: Modifier = Modifier,
-    viewModel: CalendarViewModel = koinViewModel()
+    viewModel: CalendarViewModel = koinViewModel(),
+    onNavigateToProfile: (String) -> Unit = {}
 ) {
     val state by viewModel.calendarUiState.collectAsStateWithLifecycle()
     val calendarBottomSheetState by viewModel.sheetState.collectAsStateWithLifecycle()
@@ -60,15 +62,15 @@ fun CalendarScreen(
     if (calendarBottomSheetState.isShown) {
         ModalBottomSheet(
             containerColor = White,
+            tonalElevation = 0.dp,
             sheetState = sheetState,
             onDismissRequest = viewModel::onDismissBottomSheet
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = PaddingMedium)
-            ) {
+            Column {
                 Spacer(modifier = Modifier.height(PaddingSmall))
 
                 Text(
+                    modifier = Modifier.padding(horizontal = PaddingMedium),
                     text = calendarBottomSheetState.date ?: "",
                     style = Type24,
                     color = CodGray
@@ -77,6 +79,7 @@ fun CalendarScreen(
                 Spacer(modifier = Modifier.height(PaddingRegular))
 
                 Text(
+                    modifier = Modifier.padding(horizontal = PaddingMedium),
                     text = "Дни рождения:",
                     style = Type20,
                     color = CodGray
@@ -90,7 +93,8 @@ fun CalendarScreen(
                             userName = birthday.fullName,
                             photoUrl = birthday.photoUrl,
                             onClick = {
-                                // TODO navigate to profile (pass id)
+                                onNavigateToProfile(birthday.id)
+                                viewModel.onDismissBottomSheet()
                             }
                         )
                     }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class UserDetailsResponse(
     @SerializedName("affiliate")
-    val affiliate: Affiliate,
+    val affiliate: Affiliate?,
     @SerializedName("birthDate")
     val birthDate: String,
     @SerializedName("command")
