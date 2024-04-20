@@ -31,6 +31,7 @@ import ru.yangel.hackathon.follows.presentation.ui.screen.SearchScreen
 import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.SuvaGray
+import ru.yangel.hackathon.wishlist.list.presentation.ui.OwnWishListScreen
 
 sealed class BottomBarRoutes(
     val route: String,
@@ -144,7 +145,9 @@ fun BottomNavigation(
             CalendarScreen()
         }
         composable("whishlist") {
-            WhishListScreen()
+            OwnWishListScreen {
+
+            }
         }
         composable("search") {
             SearchScreen()

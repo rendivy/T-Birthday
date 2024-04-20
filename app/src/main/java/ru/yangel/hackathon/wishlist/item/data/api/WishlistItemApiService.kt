@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import ru.yangel.hackathon.wishlist.item.data.model.RemoteWishlistItemModel
+import ru.yangel.hackathon.wishlist.item.data.model.WishListResponse
 
 interface WishlistItemApiService {
 
@@ -25,4 +26,10 @@ interface WishlistItemApiService {
 
     @DELETE("wishlist/item/{itemId}/photo")
     suspend fun deletePhotos(@Path("itemId") itemId: String, @Body body: RequestBody)
+
+    @GET("wishlist/my")
+    suspend fun getMyWishlist(): WishListResponse
+
+    @GET("wishlist/{userId}")
+    suspend fun getWishlist(@Path("userId") userId: String): WishListResponse
 }
