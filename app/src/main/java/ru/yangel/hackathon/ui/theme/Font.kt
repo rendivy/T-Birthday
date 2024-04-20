@@ -41,6 +41,15 @@ val Type15 = TextStyle(
     lineHeight = 24.sp
 )
 
+
+val Type15Search = TextStyle(
+    fontFamily = Roboto,
+    fontWeight = FontWeight.Normal,
+    fontSize = 18.sp,
+    color = Nevada,
+    lineHeight = 24.sp
+)
+
 val Type13 = TextStyle(
     fontFamily = Roboto,
     fontWeight = FontWeight.Normal,
