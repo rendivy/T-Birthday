@@ -16,7 +16,7 @@ internal val FontSmall = 16.sp
 internal val FontScheduleTitle = 23.sp
 
 val Roboto = FontFamily(
-    Font(R.font.roboto_flex, FontWeight.SemiBold),
+    Font(R.font.roboto_bold, FontWeight.SemiBold),
     Font(R.font.roboto_regular, FontWeight.Normal)
 )
 
@@ -38,6 +38,15 @@ val Type15 = TextStyle(
     fontFamily = Roboto,
     fontWeight = FontWeight.Normal,
     fontSize = 15.sp,
+    lineHeight = 24.sp
+)
+
+
+val Type15Search = TextStyle(
+    fontFamily = Roboto,
+    fontWeight = FontWeight.Normal,
+    fontSize = 18.sp,
+    color = Nevada,
     lineHeight = 24.sp
 )
 
@@ -63,7 +72,6 @@ val Type10 = TextStyle(
 )
 
 val RobotoFlex = FontFamily(
-    Font(R.font.roboto_flex),
     Font(R.font.roboto_bold, FontWeight.Bold),
     Font(R.font.roboto_regular, FontWeight.Normal),
 )
