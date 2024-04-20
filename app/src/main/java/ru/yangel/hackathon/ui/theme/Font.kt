@@ -63,7 +63,6 @@ val Type10 = TextStyle(
 )
 
 val RobotoFlex = FontFamily(
-    Font(R.font.roboto_flex)
     Font(R.font.roboto_flex),
     Font(R.font.roboto_bold, FontWeight.Bold),
     Font(R.font.roboto_regular, FontWeight.Normal),
