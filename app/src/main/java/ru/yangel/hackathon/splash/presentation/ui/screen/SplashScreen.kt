@@ -11,15 +11,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.R
+import ru.yangel.hackathon.splash.presentation.viewmodel.SplashViewModel
 
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(
+    navController: NavController,
+    splashViewModel: SplashViewModel = koinViewModel()
+) {
     LaunchedEffect(true) {
         delay(1000)
         navController.popBackStack()

@@ -7,8 +7,11 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import ru.yangel.hackathon.auth.di.provideAuthNetworkModule
+import ru.yangel.hackathon.calendar.di.provideCalendarDataModule
+import ru.yangel.hackathon.calendar.di.providePresentationModule
 import ru.yangel.hackathon.di.provideNetworkModule
 import ru.yangel.hackathon.follows.di.provideFollowsModule
+import ru.yangel.hackathon.splash.di.provideSplashPresentationModule
 import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemDomainModule
 import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemNetworkModule
 import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemPresentationModule
@@ -26,7 +29,10 @@ class TinkoffApp : Application(), KoinComponent {
                 provideNetworkModule(),
                 provideAuthNetworkModule(),
                 provideWishlistItemNetworkModule(),
-                provideWishlistItemDomainModule()
+                provideWishlistItemDomainModule(),
+                provideCalendarDataModule(),
+                provideSplashPresentationModule(),
+                providePresentationModule()
             )
         }
     }
