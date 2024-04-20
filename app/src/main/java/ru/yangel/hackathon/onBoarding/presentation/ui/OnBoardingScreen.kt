@@ -2,6 +2,7 @@ package ru.yangel.hackathon.onBoarding.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,17 +20,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ru.yangel.hackathon.R
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.Roboto
 
 
 @Composable
-@Preview(showBackground = true)
-fun OnBoardingScreen() {
+fun OnBoardingScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .clickable { navController.navigate("bottomNavigation")}
             .background(Primary),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally

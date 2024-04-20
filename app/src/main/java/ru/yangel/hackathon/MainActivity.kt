@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import ru.yangel.hackathon.navigation.ApplicationNavHost
 import ru.yangel.hackathon.notification.database.DateDatabase
 import ru.yangel.hackathon.notification.database.entity.SubscribedUser
 import ru.yangel.hackathon.notification.workmanager.BirthdayAlarmReceiver
@@ -47,7 +48,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    ApplicationNavHost()
                 }
             }
         }
