@@ -1,17 +1,14 @@
 package ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,10 +25,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.R
-import ru.yangel.hackathon.follows.presentation.ui.screen.SearchScreen
 import ru.yangel.hackathon.calendar.presentation.screen.CalendarScreen
+import ru.yangel.hackathon.follows.presentation.ui.screen.SearchScreen
 import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.SuvaGray
