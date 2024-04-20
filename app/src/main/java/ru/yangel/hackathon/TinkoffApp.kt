@@ -3,13 +3,28 @@ package ru.yangel.hackathon
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
+import org.koin.core.context.startKoin
+import ru.yangel.hackathon.auth.di.provideAuthNetworkModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemDomainModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemPresentationModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemNetworkModule
 
 class TinkoffApp : Application(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        startKoin {
+            androidContext(this@TinkoffApp)
+            modules(
+                provideWishlistItemPresentationModule(),
+                provideAuthNetworkModule(),
+                provideWishlistItemNetworkModule(),
+                provideWishlistItemDomainModule()
+            )
+        }
     }
 
     private fun createNotificationChannel() {

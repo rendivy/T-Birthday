@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -18,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import ru.yangel.hackathon.ui.theme.CodGray
@@ -37,6 +41,8 @@ fun AppOutlinedTextField(
     onValueChange: (String) -> Unit,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
+    multiLine: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text,
     contentPaddingValues: PaddingValues = PaddingValues(horizontal = 15.dp, vertical = 8.dp),
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
@@ -48,7 +54,7 @@ fun AppOutlinedTextField(
         focusedTextColor = CodGray,
         unfocusedTextColor = CodGray,
         disabledTextColor = CodGray,
-        errorContainerColor = Error,
+        errorContainerColor = Color.Transparent,
         errorTrailingIconColor = Error,
         errorBorderColor = Error,
         errorCursorColor = Error,
@@ -58,20 +64,27 @@ fun AppOutlinedTextField(
     val interactionSource = remember { MutableInteractionSource() }
 
     BasicTextField(
-        modifier = modifier.fillMaxWidth().height(56.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
         value = value,
         onValueChange = onValueChange,
         textStyle = Type15,
         visualTransformation = visualTransformation,
         interactionSource = interactionSource,
         enabled = enabled,
-        singleLine = true,
+        singleLine = !multiLine,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         cursorBrush = if (!isError) SolidColor(CodGray) else SolidColor(Error)
     ) { innerTextField ->
         OutlinedTextFieldDefaults.DecorationBox(value = value,
             colors = colors,
             innerTextField = {
-                Column {
+                Column(
+                    modifier = if (multiLine) Modifier
+                        .fillMaxSize()
+                        .padding(top = 4.dp) else Modifier
+                ) {
                     Text(text = label, style = Type10, color = Nevada)
                     Spacer(modifier = Modifier.height(4.dp))
                     Box {
