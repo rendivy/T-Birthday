@@ -55,6 +55,7 @@ dependencies {
     val room_version = "2.6.1"
     val koinVersion = "3.5.6"
     val navVersion = "2.7.7"
+    val calendarVersion = "2.5.0"
     val koinCore = "io.insert-koin:koin-core:$koinVersion"
     val koinAndroid = "io.insert-koin:koin-android:$koinVersion"
     val koinAndroidCompose = "io.insert-koin:koin-androidx-compose:$koinVersion"
@@ -64,7 +65,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
     implementation("com.kizitonwose.calendar:compose:$calendarVersion")
-
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation(koinCore)
     implementation(koinAndroidCompose)

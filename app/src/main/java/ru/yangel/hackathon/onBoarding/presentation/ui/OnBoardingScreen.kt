@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.yangel.hackathon.R
+import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.Roboto
 
@@ -38,7 +39,6 @@ fun OnBoardingScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clickable { navController.navigate("bottomNavigation")}
             .background(Primary),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -53,7 +53,7 @@ fun OnBoardingScreen(navController: NavController) {
             modifier = Modifier
                 .padding(start = 32.dp, end = 32.dp)
                 .fillMaxWidth(),
-            fontFamily = FontFamily(Font(R.font.roboto_flex)),
+            fontFamily = FontFamily(Font(R.font.roboto_bold)),
             textAlign = TextAlign.Start,
             fontWeight = FontWeight.SemiBold,
             fontSize = 24.sp
@@ -62,7 +62,7 @@ fun OnBoardingScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
-                .clickable {},
+                .noRippleClickable { navController.navigate("bottomNavigation") },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
@@ -70,7 +70,7 @@ fun OnBoardingScreen(navController: NavController) {
                 text = "Начать",
                 modifier = Modifier
                     .padding(start = 32.dp, end = 16.dp),
-                fontFamily = FontFamily(Font(R.font.roboto_flex)),
+                fontFamily = FontFamily(Font(R.font.roboto_bold)),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 24.sp
             )

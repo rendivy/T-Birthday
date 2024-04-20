@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen.BottomBar
 import ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen.MainScreen
 import ru.yangel.hackathon.onBoarding.presentation.ui.OnBoardingScreen
 import ru.yangel.hackathon.splash.presentation.ui.screen.SplashScreen

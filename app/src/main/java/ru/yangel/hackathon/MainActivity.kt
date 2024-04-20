@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
             DateDatabase::class.java, "database-name"
         ).build()
         setDailyAlarm()
+        enableEdgeToEdge()
         sendTestNotification()
         setContent {
             HackathonTheme {

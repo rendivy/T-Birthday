@@ -21,14 +21,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import ru.yangel.hackathon.R
 import ru.yangel.hackathon.calendar.presentation.screen.CalendarScreen
 import ru.yangel.hackathon.follows.presentation.ui.screen.SearchScreen
 import ru.yangel.hackathon.navigation.utils.noRippleClickable
+import ru.yangel.hackathon.profile.presentation.ProfileScreen
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.SuvaGray
 
@@ -119,8 +122,14 @@ fun RowScope.AddItem(
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
-        bottomBar = { BottomBar(navController = navController) }
+        bottomBar = {
+            if (currentRoute != "profileDetails/{id}") {
+                BottomBar(navController = navController)
+            }
+        }
     ) {
         BottomNavigation(
             bottomNavigationNavController = navController,
@@ -140,6 +149,15 @@ fun BottomNavigation(
         modifier = modifier,
         startDestination = "calendar"
     ) {
+        composable(
+            route = "profileDetails/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ProfileScreen(
+                navController = bottomNavigationNavController,
+                userId = backStackEntry.arguments?.getString("id").toString(),
+            )
+        }
         composable("calendar") {
             CalendarScreen()
         }
@@ -147,10 +165,10 @@ fun BottomNavigation(
             WhishListScreen()
         }
         composable("search") {
-            SearchScreen()
+            SearchScreen(rootNavController = bottomNavigationNavController)
         }
         composable("follows") {
-            FollowsScreen()
+            SearchScreen(rootNavController = bottomNavigationNavController)
         }
     }
 }
