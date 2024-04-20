@@ -63,6 +63,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
+    implementation("com.kizitonwose.calendar:compose:$calendarVersion")
+
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation(koinCore)
     implementation(koinAndroidCompose)

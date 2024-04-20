@@ -11,18 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview(showBackground = true)
-fun CalendarScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "calendar")
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
 fun WhishListScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
