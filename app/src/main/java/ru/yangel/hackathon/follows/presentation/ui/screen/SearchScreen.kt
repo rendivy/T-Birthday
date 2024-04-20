@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.follows.presentation.ui.component.AccentTextField
 import ru.yangel.hackathon.follows.presentation.ui.component.FillialCard
 import ru.yangel.hackathon.follows.presentation.ui.component.UserCard
@@ -43,13 +44,17 @@ import ru.yangel.hackathon.ui.theme.Type24
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, searchViewModel: SearchViewModel) {
+fun SearchScreen(
+    modifier: Modifier = Modifier,
+    searchViewModel: SearchViewModel = koinViewModel()
+) {
     val selectedPage = remember { mutableStateOf(0) }
     val pagerState = rememberPagerState(
         initialPage = selectedPage.value,
         initialPageOffsetFraction = 0f
     ) { 3 }
     val state by searchViewModel.state.collectAsStateWithLifecycle()
+    val usersState by searchViewModel.usersState.collectAsStateWithLifecycle()
 
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
     val scope = rememberCoroutineScope()
@@ -73,7 +78,9 @@ fun SearchScreen(modifier: Modifier = Modifier, searchViewModel: SearchViewModel
         Spacer(modifier = Modifier.size(24.dp))
         AccentTextField(
             textFieldValue = state,
-            onValueChange = searchViewModel::onStateChange,
+            onValueChange = {
+                searchViewModel.onStateChange(it); searchViewModel.searchUsersByName("")
+            },
             placeHolderValue = textFieldMessage
         )
 

@@ -6,25 +6,24 @@ import android.app.NotificationManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
-import ru.yangel.hackathon.follows.di.followsModule
-import org.koin.core.context.startKoin
 import ru.yangel.hackathon.auth.di.provideAuthNetworkModule
+import ru.yangel.hackathon.di.provideNetworkModule
+import ru.yangel.hackathon.follows.di.provideFollowsModule
 import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemDomainModule
-import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemPresentationModule
 import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemNetworkModule
+import ru.yangel.hackathon.wishlist.item.di.provideWishlistItemPresentationModule
 
 class TinkoffApp : Application(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()
-        startKoin {
-        }
         createNotificationChannel()
         startKoin {
             androidContext(this@TinkoffApp)
-            modules(followsModule)
             modules(
                 provideWishlistItemPresentationModule(),
+                provideFollowsModule(),
+                provideNetworkModule(),
                 provideAuthNetworkModule(),
                 provideWishlistItemNetworkModule(),
                 provideWishlistItemDomainModule()

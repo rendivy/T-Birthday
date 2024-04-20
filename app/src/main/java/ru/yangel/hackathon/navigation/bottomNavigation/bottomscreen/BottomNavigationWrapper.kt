@@ -147,7 +147,7 @@ fun BottomNavigation(
             WhishListScreen()
         }
         composable("search") {
-            SearchScreen(searchViewModel = koinViewModel())
+            SearchScreen()
         }
         composable("follows") {
             FollowsScreen()
