@@ -3,6 +3,7 @@ package ru.yangel.hackathon.wishlist.item.presentation.ui
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,12 +23,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -36,117 +35,138 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberAsyncImagePainter
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 import ru.yangel.hackathon.R
 import ru.yangel.hackathon.ui.common.AppOutlinedTextField
 import ru.yangel.hackathon.ui.common.AppTopBar
+import ru.yangel.hackathon.ui.common.ErrorContent
+import ru.yangel.hackathon.ui.common.LoadingContent
 import ru.yangel.hackathon.ui.common.PrimaryButton
 import ru.yangel.hackathon.ui.theme.CodGray
 import ru.yangel.hackathon.ui.theme.PaddingMedium
 import ru.yangel.hackathon.ui.theme.Primary
+import ru.yangel.hackathon.wishlist.item.presentation.WishlistItemEditViewModel
+import ru.yangel.hackathon.wishlist.item.presentation.state.WishlistItemEditState
 
 @Composable
-fun WishlistItemEditScreen() {
-    val imageUris = remember { mutableStateListOf<Uri>() }
-    val addLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetMultipleContents(),
-        onResult = { uri: List<Uri> ->
-            imageUris.addAll(uri)
-        })
-    var name by remember { mutableStateOf("") }
-    var comment by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
-    var link by remember { mutableStateOf("") }
-    var priority by remember { mutableStateOf("") }
+fun WishlistItemEditScreen(
+    itemId: String = ""
+) {
+    val viewModel: WishlistItemEditViewModel = koinViewModel {
+        parametersOf(itemId)
+    }
+    val imageUris = remember { viewModel.imageUris }
+    val addLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetMultipleContents(),
+            onResult = { uri: List<Uri> ->
+                imageUris.addAll(uri)
+            })
+    val content by remember { viewModel.content }
+    val screenState by remember { viewModel.state }
+    val isDataCorrectlyFilled by remember { viewModel.canSubmit }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        FloatingActionButton(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(all = 24.dp)
-            .zIndex(10f),
-            containerColor = Primary,
-            contentColor = CodGray,
-            shape = RoundedCornerShape(16.dp),
-            onClick = { /*TODO*/ }) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.apply_icon),
-                contentDescription = null
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            AppTopBar(
-                modifier = Modifier.padding(vertical = 24.dp, horizontal = PaddingMedium)
-            ) {}
-            LazyRow(contentPadding = PaddingValues(horizontal = PaddingMedium)) {
-                items(count = imageUris.size) {
-                    Image(
+    Crossfade(targetState = screenState, label = "") { state ->
+        when(state) {
+            WishlistItemEditState.Loading -> LoadingContent()
+            WishlistItemEditState.Content -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    FloatingActionButton(modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .alpha(if (isDataCorrectlyFilled) 1f else 0.5f)
+                        .padding(all = 24.dp)
+                        .zIndex(10f),
+                        containerColor = Primary,
+                        contentColor = CodGray,
+                        shape = RoundedCornerShape(16.dp),
+                        onClick = { if (isDataCorrectlyFilled) viewModel.submit() }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.apply_icon),
+                            contentDescription = null
+                        )
+                    }
+                    Column(
                         modifier = Modifier
-                            .size(120.dp)
-                            .aspectRatio(1f)
-                            .padding(end = 10.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        painter = rememberAsyncImagePainter(model = imageUris[it]),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
-                    )
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        AppTopBar(
+                            modifier = Modifier.padding(vertical = 24.dp, horizontal = PaddingMedium)
+                        ) {}
+                        LazyRow(contentPadding = PaddingValues(horizontal = PaddingMedium)) {
+                            items(count = imageUris.size) {
+                                Image(
+                                    modifier = Modifier
+                                        .size(120.dp)
+                                        .aspectRatio(1f)
+                                        .padding(end = 10.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    painter = rememberAsyncImagePainter(model = imageUris[it]),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        PrimaryButton(text = "Загрузить фотографию",
+                            trailingIconResId = R.drawable.add_icon,
+                            modifier = Modifier.padding(horizontal = PaddingMedium),
+                            onClick = {
+                                addLauncher.launch("image/*")
+                            })
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        AppOutlinedTextField(
+                            modifier = Modifier.padding(horizontal = PaddingMedium),
+                            value = content.name,
+                            onValueChange = viewModel::setName,
+                            label = "Название*",
+                            placeholder = "Введите название подарка",
+                            isError = !content.isNameCorrect
+                        )
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        AppOutlinedTextField(
+                            modifier = Modifier.padding(horizontal = PaddingMedium),
+                            value = content.price,
+                            onValueChange = viewModel::setPrice,
+                            label = "Стоимость",
+                            placeholder = "Введите стоимость подарка",
+                            keyboardType = KeyboardType.Number,
+                            isError = !content.isPriceCorrect
+                        )
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        AppOutlinedTextField(
+                            modifier = Modifier.padding(horizontal = PaddingMedium),
+                            value = content.link,
+                            onValueChange = viewModel::setLink,
+                            label = "Ссылка",
+                            placeholder = "Введите ссылку на покупку подарка",
+                            keyboardType = KeyboardType.Uri
+                        )
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        AppOutlinedTextField(
+                            modifier = Modifier.padding(horizontal = PaddingMedium),
+                            value = content.priority,
+                            onValueChange = viewModel::setPriority,
+                            label = "Приоритет (от 1 до 3)*",
+                            placeholder = "Насколько сильно вы хотите подарок",
+                            keyboardType = KeyboardType.Number,
+                            isError = !content.isPriorityCorrect
+                        )
+                        Spacer(modifier = Modifier.height(PaddingMedium))
+                        AppOutlinedTextField(
+                            modifier = Modifier
+                                .padding(horizontal = PaddingMedium)
+                                .defaultMinSize(minHeight = 120.dp),
+                            value = content.comment,
+                            onValueChange = viewModel::setComment,
+                            label = "Комментарий",
+                            placeholder = "Введите комментарий...",
+                            multiLine = true
+                        )
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            PrimaryButton(text = "Загрузить фотографию",
-                trailingIconResId = R.drawable.add_icon,
-                modifier = Modifier.padding(horizontal = PaddingMedium),
-                onClick = {
-                    addLauncher.launch("image/*")
-                })
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            AppOutlinedTextField(
-                modifier = Modifier.padding(horizontal = PaddingMedium),
-                value = name,
-                onValueChange = { name = it },
-                label = "Название*",
-                placeholder = "Введите название подарка"
-            )
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            AppOutlinedTextField(
-                modifier = Modifier.padding(horizontal = PaddingMedium),
-                value = price,
-                onValueChange = { price = it },
-                label = "Стоимость",
-                placeholder = "Введите стоимость подарка",
-                keyboardType = KeyboardType.Number
-            )
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            AppOutlinedTextField(
-                modifier = Modifier.padding(horizontal = PaddingMedium),
-                value = link,
-                onValueChange = { link = it },
-                label = "Ссылка",
-                placeholder = "Введите ссылку на покупку подарка",
-                keyboardType = KeyboardType.Uri
-            )
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            AppOutlinedTextField(
-                modifier = Modifier.padding(horizontal = PaddingMedium),
-                value = priority,
-                onValueChange = { priority = it },
-                label = "Приоритет (от 1 до 3)*",
-                placeholder = "Насколько сильно вы хотите подарок",
-                keyboardType = KeyboardType.Number
-            )
-            Spacer(modifier = Modifier.height(PaddingMedium))
-            AppOutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = PaddingMedium)
-                    .defaultMinSize(minHeight = 120.dp),
-                value = comment,
-                onValueChange = { comment = it },
-                label = "Комментарий",
-                placeholder = "Введите комментарий...",
-                multiLine = true
-            )
+            WishlistItemEditState.Error -> ErrorContent(onRetry = viewModel::reload)
         }
     }
 }

@@ -54,7 +54,7 @@ fun AppOutlinedTextField(
         focusedTextColor = CodGray,
         unfocusedTextColor = CodGray,
         disabledTextColor = CodGray,
-        errorContainerColor = Error,
+        errorContainerColor = Color.Transparent,
         errorTrailingIconColor = Error,
         errorBorderColor = Error,
         errorCursorColor = Error,
