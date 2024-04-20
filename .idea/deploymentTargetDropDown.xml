@@ -2,6 +2,18 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="OnBoardingScreen">
+        <State />
+      </entry>
+      <entry key="ProfileScreen">
+        <State />
+      </entry>
+      <entry key="Test">
+        <State />
+      </entry>
+      <entry key="YellowLoader">
+        <State />
+      </entry>
       <entry key="CalendarScreenPreview">
         <State />
       </entry>
