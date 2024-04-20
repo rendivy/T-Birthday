@@ -57,6 +57,7 @@ dependencies {
     val navVersion = "2.7.7"
     val calendarVersion = "2.5.0"
     val loggingInterceptorVersion = "4.11.0"
+    
     val koinCore = "io.insert-koin:koin-core:$koinVersion"
     val koinAndroid = "io.insert-koin:koin-android:$koinVersion"
     val koinAndroidCompose = "io.insert-koin:koin-androidx-compose:$koinVersion"
