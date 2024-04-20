@@ -2,36 +2,8 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AccentTextField">
-        <State />
-      </entry>
-      <entry key="OnBoardingScreen">
-        <State />
-      </entry>
-      <entry key="Prev">
-        <State />
-      </entry>
-      <entry key="SearchScreen">
-        <State />
-      </entry>
-      <entry key="Test">
-        <State />
-      </entry>
       <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Ruslan\.android\avd\Small_Phone_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-04-20T04:22:52.835557300Z" />
-        </State>
+        <State />
       </entry>
     </value>
   </component>
