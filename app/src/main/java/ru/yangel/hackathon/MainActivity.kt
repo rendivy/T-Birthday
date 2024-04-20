@@ -25,6 +25,7 @@ import ru.yangel.hackathon.notification.database.entity.SubscribedUser
 import ru.yangel.hackathon.notification.workmanager.BirthdayAlarmReceiver
 import ru.yangel.hackathon.notification.workmanager.NotificationHelper
 import ru.yangel.hackathon.ui.theme.HackathonTheme
+import ru.yangel.hackathon.wishlist.item.presentation.ui.WishlistItemEditScreen
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
@@ -47,7 +48,8 @@ class MainActivity : ComponentActivity(), KoinComponent {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    WishlistItemEditScreen()
+                    //Greeting("Android")
                 }
             }
         }
