@@ -33,17 +33,7 @@ fun WhishListScreen() {
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun SearchScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "search")
-    }
-}
+
 
 @Composable
 @Preview(showBackground = true)
