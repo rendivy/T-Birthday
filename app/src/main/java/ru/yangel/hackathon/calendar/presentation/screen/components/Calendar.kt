@@ -1,6 +1,7 @@
 package ru.yangel.hackathon.calendar.presentation.screen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,8 +29,10 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import ru.yangel.hackathon.R
 import ru.yangel.hackathon.calendar.presentation.utils.displayText
+import ru.yangel.hackathon.calendar.presentation.utils.noRippleInteractionSource
 import ru.yangel.hackathon.calendar.presentation.utils.rememberFirstMostVisibleMonth
 import ru.yangel.hackathon.ui.theme.CodGray
+import ru.yangel.hackathon.ui.theme.SuvaGray
 import ru.yangel.hackathon.ui.theme.Type20
 import ru.yangel.hackathon.ui.theme.White
 import java.time.DayOfWeek
@@ -64,6 +67,8 @@ fun Calendar(
 
         CalendarTitle(
             currentMonth = visibleMonth.yearMonth,
+            isPreviousEnabled = state.firstVisibleMonth.yearMonth.isAfter(startMonth),
+            isNextEnabled = state.firstVisibleMonth.yearMonth.isBefore(endMonth),
             goToPrevious = {
                 coroutineScope.launch {
                     state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
@@ -104,6 +109,8 @@ fun Calendar(
 fun CalendarTitle(
     modifier: Modifier = Modifier,
     currentMonth: YearMonth,
+    isPreviousEnabled: Boolean,
+    isNextEnabled: Boolean,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit
 ) {
@@ -113,11 +120,21 @@ fun CalendarTitle(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { goToPrevious() }
+            onClick = {
+                if (isPreviousEnabled) {
+                    goToPrevious()
+                }
+            },
+            interactionSource = if (!isPreviousEnabled) {
+                noRippleInteractionSource
+            } else {
+                remember { MutableInteractionSource() }
+            }
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.arrow_back),
+                tint = if (isPreviousEnabled) CodGray else SuvaGray,
                 contentDescription = null
             )
         }
@@ -129,11 +146,21 @@ fun CalendarTitle(
         )
 
         IconButton(
-            onClick = { goToNext() }
+            onClick = {
+                if (isNextEnabled) {
+                    goToNext()
+                }
+            },
+            interactionSource = if (!isNextEnabled) {
+                noRippleInteractionSource
+            } else {
+                remember { MutableInteractionSource() }
+            }
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_forward),
+                tint = if (isNextEnabled) CodGray else SuvaGray,
                 contentDescription = null
             )
         }
