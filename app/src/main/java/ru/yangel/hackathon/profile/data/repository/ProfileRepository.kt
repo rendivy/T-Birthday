@@ -26,6 +26,10 @@ class ProfileRepository(
         val user = database.subscriptionsDao().getUserById(userId)
         database.subscriptionsDao().deletePersonalSubscription(user)
     }
+
+    suspend fun getAiAnswers(message: String): String {
+        return profileApi.getAiAnswers(message).message
+    }
 }
 
 
