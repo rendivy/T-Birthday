@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -94,4 +95,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.gson)
     implementation(libs.converter.gson)
+
+    implementation(libs.krossbow.stomp.core)
+    implementation(libs.krossbow.websocket.builtin)
+    implementation(libs.krossbow.stomp.kxserialization.json)
 }
