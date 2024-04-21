@@ -8,6 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.yangel.hackathon.profile.data.model.AllUserSubscription
+import ru.yangel.hackathon.profile.data.model.Id
 import ru.yangel.hackathon.profile.data.model.UserDetailsResponse
 
 
@@ -15,6 +16,9 @@ interface ProfileApiService {
 
     @GET("user/profile/{userId}")
     suspend fun getProfile(@Path("userId") userId: String): UserDetailsResponse
+
+    @GET("user/profile")
+    suspend fun getOwnProfile(): Id
 
     @GET("/api/v1/subscriptions/person/all")
     suspend fun getAllSubscriptions(): List<AllUserSubscription>

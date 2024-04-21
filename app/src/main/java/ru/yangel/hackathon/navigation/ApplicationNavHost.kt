@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ru.yangel.hackathon.chat.presentation.ui.ChatScreen
 import ru.yangel.hackathon.ai.presentation.screen.AiChatScreen
 import ru.yangel.hackathon.login.presentation.screen.LoginScreen
 import ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen.MainScreen
@@ -91,7 +92,13 @@ fun ApplicationNavHost() {
                     navController.navigate("otherItemView/$it")
                 },
                 onBack = navController::popBackStack,
-                onNavigateToChat = {})
+                onNavigateToChat = { navController.navigate("wishlist/$userId/$name/chat") })
+        }
+
+        composable(route = "wishlist/{userId}/{name}/chat") { backStackEntry ->
+            val userId = backStackEntry.arguments?.getString("userId").toString()
+            val name = backStackEntry.arguments?.getString("name").toString()
+            ChatScreen(chatId = userId, name = name)
         }
     }
 

@@ -9,6 +9,9 @@ import org.koin.core.context.startKoin
 import ru.yangel.hackathon.auth.di.provideAuthNetworkModule
 import ru.yangel.hackathon.calendar.di.provideCalendarDataModule
 import ru.yangel.hackathon.calendar.di.providePresentationModule
+import ru.yangel.hackathon.chat.di.provideChatDataModule
+import ru.yangel.hackathon.chat.di.provideChatNetworkModule
+import ru.yangel.hackathon.chat.di.provideChatPresentationModule
 import ru.yangel.hackathon.di.provideNetworkModule
 import ru.yangel.hackathon.follows.di.provideFollowsModule
 import ru.yangel.hackathon.splash.di.provideSplashPresentationModule
@@ -32,7 +35,10 @@ class TinkoffApp : Application(), KoinComponent {
                 provideWishlistItemDomainModule(),
                 provideCalendarDataModule(),
                 provideSplashPresentationModule(),
-                providePresentationModule()
+                providePresentationModule(),
+                provideChatNetworkModule(),
+                provideChatDataModule(),
+                provideChatPresentationModule()
             )
         }
     }
