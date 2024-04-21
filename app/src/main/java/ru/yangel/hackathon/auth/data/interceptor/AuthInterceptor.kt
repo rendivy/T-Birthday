@@ -4,13 +4,17 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import ru.yangel.hackathon.auth.data.api.LoginApi
+import ru.yangel.hackathon.login.data.TokenLocalStorage
 
-class AuthInterceptor(private val loginApi: LoginApi) : Interceptor {
+class AuthInterceptor(
+    private val loginApi: LoginApi,
+    private val tokenLocalStorage: TokenLocalStorage
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val tokens = runBlocking { loginApi.login() }
+        val tokens = tokenLocalStorage.getToken()
         val requestWithHeader =
-            chain.request().newBuilder().addHeader("Authorization", "Bearer ${tokens.accessToken}")
+            chain.request().newBuilder().addHeader("Authorization", "Bearer $tokens")
                 .build()
 
         return chain.proceed(requestWithHeader)

@@ -193,9 +193,7 @@ fun ProfileScreen(
             }
         }
 
-        is ProfileState.Error -> {
-            ErrorContent(onRetry = { profileViewModel.retryState() })
-        }
+        is ProfileState.Error -> {}
     }
 }
 

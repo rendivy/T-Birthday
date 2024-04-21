@@ -16,7 +16,6 @@ interface ProfileApiService {
     @GET("/api/v1/subscriptions/person/all")
     suspend fun getAllSubscriptions(): List<AllUserSubscription>
 
-
     @POST("/api/v1/subscriptions/person/{userId}")
     suspend fun subscribe(@Path("userId") userId: String)
 

@@ -3,6 +3,7 @@ package ru.yangel.hackathon.profile.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.yangel.hackathon.profile.data.model.UserDetailsResponse
@@ -35,19 +36,19 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     }
 
     fun subscribe(userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 profileRepository.subscribe(userId)
                 isUserAlreadySubscribed.value = true
 
             } catch (e: Exception) {
-                profileState.value = ProfileState.Error(e)
+                throw e
             }
         }
     }
 
     fun unsubscribe(userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 profileRepository.unsubscribe(userId)
                 isUserAlreadySubscribed.value = false

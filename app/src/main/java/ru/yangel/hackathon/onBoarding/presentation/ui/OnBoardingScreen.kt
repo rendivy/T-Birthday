@@ -2,7 +2,6 @@ package ru.yangel.hackathon.onBoarding.presentation.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -75,8 +74,6 @@ fun OnBoardingScreen(navController: NavController) {
                 contentDescription = null
             )
         }
-
         Spacer(modifier = Modifier.weight(1.2f))
-
     }
 }
