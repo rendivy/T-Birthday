@@ -163,7 +163,7 @@ fun BottomNavigation(
             SearchScreen(rootNavController = rootNavController)
         }
         composable("follows") {
-            SearchScreen(rootNavController = rootNavController)
+            ru.yangel.hackathon.real_follows.ui.screen.FollowsScreen(rootNavController = rootNavController)
         }
     }
 }

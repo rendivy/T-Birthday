@@ -20,4 +20,16 @@ class FollowsRepository(private val searchUsersApiService: SearchUsersApiService
     suspend fun searchUsersByAffiliate(affiliate: String): List<AffiliateResponse> {
         return searchUsersApiService.getAffiliate(affiliate)
     }
+
+    suspend fun searchFollowedUsersByName(): List<UserSearchResponse> {
+        return searchUsersApiService.getFollowedUsersByName()
+    }
+
+    suspend fun searchFollowedUsersByCommand(): List<CommandResponse> {
+        return searchUsersApiService.getFollowedCommand()
+    }
+
+    suspend fun searchFollowedUsersByAffiliate(): List<AffiliateResponse> {
+        return searchUsersApiService.getFollowedAffiliate()
+    }
 }

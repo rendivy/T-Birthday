@@ -1,4 +1,4 @@
-package ru.yangel.hackathon.follows.presentation.ui.screen
+package ru.yangel.hackathon.real_follows.ui.screen
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -51,10 +51,12 @@ import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.follows.presentation.ui.component.AccentTextField
 import ru.yangel.hackathon.follows.presentation.ui.component.FillialCard
 import ru.yangel.hackathon.follows.presentation.ui.component.UserCard
+import ru.yangel.hackathon.follows.presentation.ui.screen.SearchPlaceHolder
 import ru.yangel.hackathon.follows.presentation.viewmodel.AffiliatesState
 import ru.yangel.hackathon.follows.presentation.viewmodel.SearchViewModel
 import ru.yangel.hackathon.follows.presentation.viewmodel.TeamState
 import ru.yangel.hackathon.follows.presentation.viewmodel.UsersState
+import ru.yangel.hackathon.real_follows.ui.viewmodel.FollowsViewModel
 import ru.yangel.hackathon.ui.theme.CodGray
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.SuvaGray
@@ -63,29 +65,22 @@ import ru.yangel.hackathon.ui.theme.Type24
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SearchScreen(
+fun FollowsScreen(
     modifier: Modifier = Modifier,
     rootNavController: NavController,
-    searchViewModel: SearchViewModel = koinViewModel()
+    followsViewModel: FollowsViewModel = koinViewModel()
 ) {
     val selectedPage = remember { mutableStateOf(0) }
     val pagerState = rememberPagerState(
         initialPage = selectedPage.value,
         initialPageOffsetFraction = 0f
     ) { 3 }
-    val state by searchViewModel.state.collectAsStateWithLifecycle()
-    val usersState by searchViewModel.usersState.collectAsStateWithLifecycle()
-    val commandState by searchViewModel.teamState.collectAsStateWithLifecycle()
-    val affiliatesState by searchViewModel.affiliatesState.collectAsStateWithLifecycle()
+    val usersState by followsViewModel.usersState.collectAsStateWithLifecycle()
+    val commandState by followsViewModel.teamState.collectAsStateWithLifecycle()
+    val affiliatesState by followsViewModel.affiliatesState.collectAsStateWithLifecycle()
 
     val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
     val scope = rememberCoroutineScope()
-    val textFieldMessage = when (pagerState.currentPage) {
-        0 -> "Поиск по людям"
-        1 -> "Поиск по командам"
-        2 -> "Поиск по филиалам"
-        else -> ""
-    }
 
     Column(
         modifier = Modifier
@@ -93,23 +88,16 @@ fun SearchScreen(
             .background(Color.White)
     ) {
         Text(
-            text = "Поиск",
+            text = "Отслеживаемое",
             style = Type24,
             modifier = Modifier.padding(top = 24.dp, start = 16.dp)
         )
         Spacer(modifier = Modifier.size(24.dp))
-        AccentTextField(
-            textFieldValue = state,
-            onValueChange = {
-                searchViewModel.onStateChange(it);
-                when (pagerState.currentPage) {
-                    0 -> searchViewModel.searchUsersByName(it)
-                    1 -> searchViewModel.searchCommand(it)
-                    2 -> searchViewModel.searchAffiliate(it)
-                }
-            },
-            placeHolderValue = textFieldMessage
-        )
+        when (pagerState.currentPage) {
+            0 -> followsViewModel.searchFollowedUsersByName()
+            1 -> followsViewModel.searchFollowedCommand()
+            2 -> followsViewModel.searchFollowedAffiliate()
+        }
 
 
         ScrollableTabRow(
@@ -128,7 +116,7 @@ fun SearchScreen(
             },
             divider = {  }
         ) {
-            ru.yangel.hackathon.real_follows.ui.screen.HomeTabs.entries.forEachIndexed { index, currentTab ->
+            ru.yangel.hackathon.follows.presentation.ui.screen.HomeTabs.entries.forEachIndexed { index, currentTab ->
 
                 Tab(
                     selected = selectedTabIndex.value == index,
@@ -160,7 +148,7 @@ fun SearchScreen(
                         UsersState.Initial -> {
                             SearchPlaceHolder()
                         }
-                        UsersState.Loading -> ru.yangel.hackathon.real_follows.ui.screen.YellowLoader()
+                        UsersState.Loading -> YellowLoader()
                         is UsersState.Success -> {
                             val content = (usersState as UsersState.Success).users
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -177,7 +165,7 @@ fun SearchScreen(
                         }
 
                         is UsersState.Error -> {
-                            searchViewModel.resetUsersState()
+                            followsViewModel.resetUsersState()
                         }
                     }
                 }
@@ -185,7 +173,7 @@ fun SearchScreen(
                 1 -> {
                     when (commandState) {
                         TeamState.Initial -> SearchPlaceHolder()
-                        TeamState.Loading -> ru.yangel.hackathon.real_follows.ui.screen.YellowLoader()
+                        TeamState.Loading -> YellowLoader()
                         is TeamState.Success -> {
                             val content = (commandState as TeamState.Success).users
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -200,7 +188,7 @@ fun SearchScreen(
                         }
 
                         is TeamState.Error -> {
-                            searchViewModel.resetTeamState()
+                            followsViewModel.resetTeamState()
                         }
                     }
                 }
@@ -208,7 +196,7 @@ fun SearchScreen(
                 2 -> {
                     when (affiliatesState) {
                         AffiliatesState.Initial -> SearchPlaceHolder()
-                        AffiliatesState.Loading -> ru.yangel.hackathon.real_follows.ui.screen.YellowLoader()
+                        AffiliatesState.Loading -> YellowLoader()
                         is AffiliatesState.Success -> {
                             val content = (affiliatesState as AffiliatesState.Success).users
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -222,7 +210,7 @@ fun SearchScreen(
                             }
                         }
                         else -> {
-                            searchViewModel.resetAffiliatesState()
+                            followsViewModel.resetAffiliatesState()
                         }
                     }
                 }
@@ -247,34 +235,6 @@ fun YellowLoader() {
             strokeWidth = 3.dp
         )
     }
-}
-
-
-fun Modifier.shimmerEffect(): Modifier = composed {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val transition = rememberInfiniteTransition(label = "")
-    val startOffsetX by transition.animateFloat(
-        initialValue = -2 * size.width.toFloat(),
-        targetValue = 2 * size.width.toFloat(),
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000),
-        ), label = ""
-    )
-    background(
-        brush = Brush.linearGradient(
-            colors = listOf(
-                SuvaGray,
-                Primary,
-                SuvaGray
-            ),
-            start = Offset(startOffsetX, 0f),
-            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
-        )
-    )
-        .onGloballyPositioned {
-            size = it.size
-        }
-
 }
 
 enum class HomeTabs(

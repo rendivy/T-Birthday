@@ -18,4 +18,13 @@ interface SearchUsersApiService {
 
     @GET("/affiliate")
     suspend fun getAffiliate(@Query("affiliate_name") affiliate: String): List<AffiliateResponse>
+
+    @GET("/api/v1/subscriptions/person/all")
+    suspend fun getFollowedUsersByName(): List<UserSearchResponse>
+
+    @GET("/api/v1/subscriptions/command/all")
+    suspend fun getFollowedCommand(): List<CommandResponse>
+
+    @GET("/api/v1/subscriptions/affiliate/all")
+    suspend fun getFollowedAffiliate(): List<AffiliateResponse>
 }
