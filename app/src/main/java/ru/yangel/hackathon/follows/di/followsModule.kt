@@ -6,6 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import ru.yangel.hackathon.ai.viewModel.AiViewModel
 import ru.yangel.hackathon.auth.data.api.LoginApi
 import ru.yangel.hackathon.calendar.data.db.SubscriptionsDatabase
 import ru.yangel.hackathon.follows.data.api.SearchUsersApiService
@@ -22,6 +23,7 @@ fun provideFollowsModule() = module {
     viewModel { SearchViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { LoginViewModel(get()) }
+    viewModel { AiViewModel(get()) }
     single { provideSearchUsersApiService(get()) }
     single { provideProfileApiService(get()) }
     factory { provideRepository(get()) }

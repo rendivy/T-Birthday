@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ru.yangel.hackathon.ai.presentation.screen.AiChatScreen
 import ru.yangel.hackathon.login.presentation.screen.LoginScreen
 import ru.yangel.hackathon.navigation.bottomNavigation.bottomscreen.MainScreen
 import ru.yangel.hackathon.onBoarding.presentation.ui.OnBoardingScreen
@@ -46,6 +47,9 @@ fun ApplicationNavHost() {
                 navController.popBackStack()
                 navController.popBackStack()
             }, onBack = navController::popBackStack)
+        }
+        composable("ai_screen") {
+            AiChatScreen()
         }
         composable(
             "itemView/{itemId}",
