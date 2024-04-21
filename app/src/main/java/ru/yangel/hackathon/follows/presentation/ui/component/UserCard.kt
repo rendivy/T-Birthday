@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,8 +34,6 @@ import ru.yangel.hackathon.ui.theme.AliceBlue
 import ru.yangel.hackathon.ui.theme.RobotoFlex
 import ru.yangel.hackathon.ui.theme.SuvaGray
 import ru.yangel.hackathon.ui.theme.Type15
-import ru.yangel.hackathon.ui.theme.Type20
-import ru.yangel.hackathon.ui.theme.Type24
 
 @Composable
 fun UserCard(userName: String, photoUrl: String, onClick: () -> Unit = {}) {
@@ -61,10 +58,7 @@ fun UserCard(userName: String, photoUrl: String, onClick: () -> Unit = {}) {
         ) {
             val state = painter.state
             if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                Box(modifier = Modifier
-                    .size(84.dp)
-                    .clip(CircleShape)
-                    .shimmerEffect())
+                Box(modifier = Modifier.shimmerEffect())
             } else {
                 SubcomposeAsyncImageContent()
             }

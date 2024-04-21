@@ -15,15 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.koin.androidx.compose.koinViewModel
-import ru.yangel.hackathon.follows.presentation.ui.component.AccentTextField
-import ru.yangel.hackathon.follows.presentation.ui.screen.YellowLoader
 import ru.yangel.hackathon.login.presentation.viewModel.LoginViewModel
 import ru.yangel.hackathon.login.presentation.viewModel.UserState
 import ru.yangel.hackathon.ui.common.AppOutlinedTextField

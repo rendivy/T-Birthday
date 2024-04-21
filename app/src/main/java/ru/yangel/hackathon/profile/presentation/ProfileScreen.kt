@@ -32,11 +32,10 @@ import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import ru.yangel.hackathon.R
-import ru.yangel.hackathon.follows.presentation.ui.screen.YellowLoader
+import ru.yangel.hackathon.real_follows.ui.screen.YellowLoader
 import ru.yangel.hackathon.navigation.utils.noRippleClickable
 import ru.yangel.hackathon.profile.presentation.viewmodel.ProfileState
 import ru.yangel.hackathon.profile.presentation.viewmodel.ProfileViewModel
-import ru.yangel.hackathon.ui.common.ErrorContent
 import ru.yangel.hackathon.ui.common.PrimaryButton
 import ru.yangel.hackathon.ui.theme.CodGray
 import ru.yangel.hackathon.ui.theme.PaddingMedium
