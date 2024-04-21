@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -87,7 +89,8 @@ fun AiChatScreen(aiViewModel: AiViewModel = koinViewModel()) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .background(AliceBlue),
+                .background(AliceBlue)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -106,7 +109,7 @@ fun AiChatScreen(aiViewModel: AiViewModel = koinViewModel()) {
 
                 is AiState.Content -> {
                     val text = (aiState as AiState.Content).message
-                    Text(text = text)
+                    AiCard(text = text)
                 }
 
                 is AiState.Loading -> {

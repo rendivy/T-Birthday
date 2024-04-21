@@ -28,7 +28,8 @@ class ProfileRepository(
     }
 
     suspend fun getAiAnswers(message: String): String {
-        return profileApi.getAiAnswers(message).message
+        val response = profileApi.getAiAnswers(message)
+        return response.source().readUtf8()
     }
 }
 

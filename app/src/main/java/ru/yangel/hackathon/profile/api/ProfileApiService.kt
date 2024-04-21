@@ -1,7 +1,7 @@
 package ru.yangel.hackathon.profile.api
 
 
-import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -30,7 +30,7 @@ interface ProfileApiService {
     suspend fun unsubscribe(@Path("userId") userId: String)
 
     @GET("/inventor")
-    suspend fun getAiAnswers(@Query("text") promt: String): Response
+    suspend fun getAiAnswers(@Query("text") promt: String): ResponseBody
 
 
 }
