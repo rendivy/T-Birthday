@@ -42,7 +42,7 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
                 isUserAlreadySubscribed.value = true
 
             } catch (e: Exception) {
-                throw e
+                profileState.value = ProfileState.Error(e)
             }
         }
     }
