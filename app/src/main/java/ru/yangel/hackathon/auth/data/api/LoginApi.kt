@@ -14,7 +14,7 @@ interface LoginApi {
         @Field("client_id") clientId: String = "users-app",
         @Field("client_secret") clientSecret: String = "12345678",
         @Field("grant_type") grantType: String = "password",
-        @Field("username") username: String = "volod",
+        @Field("username") username: String = "pups",
         @Field("password") password: String = "password"
     ): TokenResponse
 
