@@ -43,6 +43,8 @@ import ru.yangel.hackathon.ui.theme.PaddingMedium
 import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.Type15
 import ru.yangel.hackathon.ui.theme.Type24
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -97,7 +99,7 @@ fun ProfileScreen(
                             containerColor = Primary,
                             contentColor = CodGray,
                             shape = RoundedCornerShape(16.dp),
-                            onClick = { }) {
+                            onClick = { navController.navigate("wishlist/${profileModel.id}/${profileModel.fullName}/${profileModel.birthDate}/${URLEncoder.encode(profileModel.photoUrl, StandardCharsets.UTF_8.toString())}") }) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.cart_icon),
                                 contentDescription = null

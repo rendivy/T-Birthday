@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -78,7 +79,11 @@ fun WishlistItemScreen(
             is WishlistItemState.Loading -> LoadingContent()
             is WishlistItemState.Error -> ErrorContent(onRetry = viewModel::reload)
             is WishlistItemState.Content -> {
-                Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding()
+                ) {
                     if (isFromOwnWishlist) {
                         FloatingActionButton(
                             modifier = Modifier
@@ -190,11 +195,13 @@ fun WishlistItemScreen(
                                         try {
                                             uriHandler.openUri(url)
                                         } catch (e: Exception) {
-                                            Toast.makeText(
+                                            Toast
+                                                .makeText(
                                                     context,
                                                     "Не удалось открыть ссылку",
                                                     Toast.LENGTH_SHORT
-                                                ).show()
+                                                )
+                                                .show()
                                         }
                                     },
                                 text = "Ссылка на товар",
@@ -212,11 +219,13 @@ fun WishlistItemScreen(
                                 color = Nevada
                             )
                         }
-                        if (!isFromOwnWishlist && !state.content.isClosed) {
+                        if (!isFromOwnWishlist) {
                             Spacer(modifier = Modifier.height(PaddingMedium))
                             PrimaryButton(
-                                modifier = Modifier.padding(horizontal = PaddingMedium),
-                                text = "Отметить как купленное",
+                                modifier = Modifier
+                                    .padding(horizontal = PaddingMedium)
+                                    .alpha(if (state.content.isClosed) 0.5f else 1f),
+                                text = if (!state.content.isClosed) "Отметить как купленное" else "Куплено",
                                 onClick = viewModel::markAsBought
                             )
                         }
