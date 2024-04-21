@@ -7,5 +7,6 @@ data class Message(
     val senderName: String,
     val senderAvatarUrl: String,
     val content: String,
-    val isNotification: Boolean
+    val isNotification: Boolean,
+    val isOwnMessage: Boolean
 )

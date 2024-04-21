@@ -1,65 +1,42 @@
 package ru.yangel.hackathon.chat.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
-import org.hildan.krossbow.stomp.StompClient
-import org.hildan.krossbow.stomp.conversions.kxserialization.json.withJsonConversions
-import org.hildan.krossbow.stomp.headers.StompSendHeaders
-import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
-import org.hildan.krossbow.websocket.WebSocketClient
-import org.hildan.krossbow.websocket.builtin.builtIn
-import ru.yangel.hackathon.auth.data.api.LoginApi
 import ru.yangel.hackathon.chat.data.api.ChatApiService
 import ru.yangel.hackathon.chat.data.model.EndpointMessageModel
-import ru.yangel.hackathon.chat.data.model.RequestMessageDto
-import ru.yangel.hackathon.chat.data.model.ResponseMessageDto
 import ru.yangel.hackathon.chat.domain.entity.Message
+import ru.yangel.hackathon.profile.api.ProfileApiService
+import java.util.UUID
+
 
 class ChatMessagesRepository(
-    private val chatApiService: ChatApiService, private val loginApi: LoginApi
+    private val chatApiService: ChatApiService,
+    private val profileApiService: ProfileApiService
 ) {
 
     private val messageSendFlow = MutableSharedFlow<Pair<String, String>>()
 
     fun getMessagesFlow(chatRoomId: String) = channelFlow {
-        val messages = mutableMapOf<String, Message>()
+        val messages = mutableListOf<Message>()
+        val ownProfile = profileApiService.getOwnProfile()
         val remoteMessages = chatApiService.getMessages(chatRoomId)
-        messages.putAll(remoteMessages.toMessages())
-        send(messages.values.sortedBy { it.messageId })
-        val tokens = loginApi.login()
+        messages.addAll(remoteMessages.toMessages(ownProfile.id))
+        send(messages)
 
-        val client = StompClient(WebSocketClient.builtIn())
-        val session = client.connect(
-            url = "ws://158.160.75.21:8080/ws",
-            customStompConnectHeaders = mapOf("Authorization" to "Bearer ${tokens.accessToken}")
-        ).withJsonConversions()
-
-        val messagesFlow: Flow<ResponseMessageDto> = session.subscribe(
-            StompSubscribeHeaders(
-                destination = "/topic/$chatRoomId/messages",
-                customHeaders = mapOf("Authorization" to "Bearer ${tokens.accessToken}")
-            ), ResponseMessageDto.serializer()
-        )
-
-        launch {
-            messagesFlow.collect { messageDto ->
-                messages[messageDto.messageId] = messageDto.toMessage()
-                send(messages.values.sortedBy { it.messageId })
-            }
-        }
-
-        launch {
-            messageSendFlow.filter { it.first == chatRoomId }.collect { (chatRoomId, message) ->
-                session.convertAndSend(
-                    StompSendHeaders(
-                        destination = "/app/chat",
-                        customHeaders = mapOf("Authorization" to "Bearer ${tokens.accessToken}")
-                    ), RequestMessageDto(chatRoomId, message), RequestMessageDto.serializer()
-                )
-            }
+        messageSendFlow.filter { it.first == chatRoomId }.collect {
+            send(
+                listOf(Message(
+                    messageId = UUID.randomUUID().toString(),
+                    senderId = ownProfile.id,
+                    receiverId = chatRoomId,
+                    senderName = ownProfile.fullName,
+                    senderAvatarUrl = ownProfile.photoUrl,
+                    content = it.second,
+                    isNotification = false,
+                    isOwnMessage = true
+                ))
+            )
         }
     }
 
@@ -69,10 +46,17 @@ class ChatMessagesRepository(
 
 }
 
-private fun ResponseMessageDto.toMessage(): Message {
-    TODO("Not yet implemented")
-}
+private fun List<EndpointMessageModel>.toMessages(userId: String): List<Message> =
+    this.sortedBy { it.messageId }.map {
+        Message(
+            messageId = it.messageId,
+            senderId = it.senderId,
+            receiverId = it.chatRoomId,
+            senderName = it.fullName,
+            senderAvatarUrl = it.avatarUrl,
+            content = it.content,
+            isNotification = it.isNotification,
+            isOwnMessage = userId == it.senderId
+        )
+    }
 
-private fun List<EndpointMessageModel>.toMessages(): Map<out String, Message> {
-    TODO("Not yet implemented")
-}

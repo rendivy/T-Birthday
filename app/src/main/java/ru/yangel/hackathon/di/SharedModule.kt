@@ -9,8 +9,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.yangel.hackathon.auth.data.interceptor.AuthInterceptor
 import ru.yangel.hackathon.calendar.data.serializer.LocalDateDeserializer
+import ru.yangel.hackathon.chat.data.serialization.LocalDateTimeDeserializer
 import ru.yangel.hackathon.wishlist.item.data.api.Constants
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 private fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -21,6 +23,7 @@ private fun provideLoggingInterceptor(): HttpLoggingInterceptor =
 
 fun provideGson(): Gson = GsonBuilder()
     .registerTypeAdapter(LocalDate::class.java, LocalDateDeserializer)
+    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer)
     .create()
 
 fun provideAuthOkHttpClient(
