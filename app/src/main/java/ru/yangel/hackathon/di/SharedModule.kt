@@ -2,6 +2,7 @@ package ru.yangel.hackathon.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -40,8 +41,12 @@ fun provideRetrofit(
     okHttpClient: OkHttpClient,
     gson: Gson
 ): Retrofit =
-    Retrofit.Builder().baseUrl(Constants.BASE_URL).client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create(gson)).build()
+    Retrofit.Builder()
+        .baseUrl(Constants.BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(ResultCallAdapterFactory.create())
+        .build()
 
 
 fun provideNetworkModule() = module {

@@ -12,7 +12,12 @@ class SubscriptionsRepository(
 
     suspend fun getAndSaveRemotePersonalSubscriptions() {
         val remotePersonalSubscriptions = subscriptionsApiService.getAllPersonalSubscriptions()
-        subscriptionsDao.upsertAllPersonalSubscriptions(remotePersonalSubscriptions)
+        if (remotePersonalSubscriptions.isSuccess) {
+            subscriptionsDao.deleteAllPersonalSubscriptions()
+            subscriptionsDao.upsertAllPersonalSubscriptions(remotePersonalSubscriptions.getOrDefault(
+                emptyList()
+            ))
+        }
     }
 
     fun getLocalPersonalSubscriptions(): Flow<List<PersonalSubscriptionDto>> {

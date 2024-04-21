@@ -40,8 +40,8 @@ class CalendarViewModel(
     init {
         _calendarUiState.update { CalendarUiState.Loading }
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            val startDate = LocalDate.now()
-            val endDate = startDate.plusYears(1)
+            val startDate = LocalDate.now().withDayOfMonth(1)
+            val endDate = startDate.plusYears(1).plusMonths(1)
             subscriptionsRepository.getLocalPersonalSubscriptions()
                 .collect { subscriptions ->
                     val birthdays = mutableListOf<Birthday>()
@@ -59,7 +59,8 @@ class CalendarViewModel(
                                 )
                             )
                             birthdays.add(birthday)
-                        } else if (nextYearBirthday in startDate..endDate) {
+                        }
+                        if (nextYearBirthday in startDate..endDate) {
                             val birthday = Birthday(
                                 id = it.id,
                                 fullName = it.fullName,
