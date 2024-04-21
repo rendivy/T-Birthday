@@ -1,7 +1,6 @@
-package ru.yangel.hackathon.follows.presentation.ui.component
+package ru.yangel.hackathon.chat.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,75 +19,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ru.yangel.hackathon.R
 import ru.yangel.hackathon.navigation.utils.noRippleClickable
-import ru.yangel.hackathon.ui.theme.AliceBlue
 import ru.yangel.hackathon.ui.theme.Nevada
 import ru.yangel.hackathon.ui.theme.PaddingMedium
-import ru.yangel.hackathon.ui.theme.Primary
 import ru.yangel.hackathon.ui.theme.Type15Search
 
-
 @Composable
-fun AccentTextField(
-    modifier: Modifier = Modifier,
-    textFieldValue: String = "",
-    singleLine: Boolean = true,
-    placeHolderValue: String = "Поиск по людям",
-    onValueChange: (String) -> Unit = {},
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
-) {
-    BasicTextField(
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp)
-            .background(
-                color = AliceBlue,
-                shape = RoundedCornerShape(7.dp)
-            )
-            .fillMaxWidth(),
-        value = textFieldValue,
-        onValueChange = onValueChange,
-        textStyle = Type15Search,
-        keyboardOptions = keyboardOptions,
-        singleLine = singleLine,
-        enabled = true,
-        cursorBrush = SolidColor(Nevada),
-        decorationBox = @Composable { innerTextField ->
-
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = PaddingMedium,
-                        bottom = PaddingMedium,
-                        top = PaddingMedium,
-                        end = PaddingMedium
-                    )
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.search_icon),
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                    tint = Nevada,
-                    contentDescription = null,
-                )
-                innerTextField()
-                if (textFieldValue.isEmpty()) {
-                    Text(
-                        text = placeHolderValue,
-                        textAlign = TextAlign.Start,
-                        style = Type15Search
-                    )
-                }
-            }
-        }
-    )
-}
-
-@Composable
-fun AiTextField(
+fun BottomText(
     modifier: Modifier = Modifier,
     textFieldValue: String = "",
     singleLine: Boolean = true,
     onClick: () -> Unit = {},
-    placeHolderValue: String = "Введите увлечения, интересы или хобби...",
+    placeHolderValue: String = "Введите сообщение...",
     onValueChange: (String) -> Unit = {},
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
@@ -108,7 +49,6 @@ fun AiTextField(
         enabled = true,
         cursorBrush = SolidColor(Color.White),
         decorationBox = @Composable { innerTextField ->
-
             Box(
                 modifier = modifier
                     .fillMaxWidth()
@@ -120,11 +60,11 @@ fun AiTextField(
                     )
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ai_icon),
+                    painter = painterResource(id = R.drawable.chevron_right),
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .noRippleClickable { onClick() },
-                    tint = Primary,
+                    tint = Nevada,
                     contentDescription = null,
                 )
                 innerTextField()
@@ -139,5 +79,3 @@ fun AiTextField(
         }
     )
 }
-
-
