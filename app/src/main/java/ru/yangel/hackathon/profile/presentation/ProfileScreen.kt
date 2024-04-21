@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -99,7 +100,16 @@ fun ProfileScreen(
                             containerColor = Primary,
                             contentColor = CodGray,
                             shape = RoundedCornerShape(16.dp),
-                            onClick = { navController.navigate("wishlist/${profileModel.id}/${profileModel.fullName}/${profileModel.birthDate}/${URLEncoder.encode(profileModel.photoUrl, StandardCharsets.UTF_8.toString())}") }) {
+                            onClick = {
+                                navController.navigate(
+                                    "wishlist/${profileModel.id}/${profileModel.fullName}/${profileModel.birthDate}/${
+                                        URLEncoder.encode(
+                                            profileModel.photoUrl,
+                                            StandardCharsets.UTF_8.toString()
+                                        )
+                                    }"
+                                )
+                            }) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.cart_icon),
                                 contentDescription = null
@@ -189,13 +199,19 @@ fun ProfileScreen(
                         trailingIconResId = trailingIcon,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp)
                     )
+                    AnimatedVisibility(visible = isUserAlreadySubscribed.value) {
+                        PrimaryButton(
+                            text = "Сгенерировать идеи для подарка",
+                            onClick = { navController.navigate("ai_screen") },
+                            trailingIconResId = R.drawable.ai_icon,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        )
+                    }
                 }
             }
         }
 
-        is ProfileState.Error -> {
-            ErrorContent(onRetry = { profileViewModel.retryState() })
-        }
+        is ProfileState.Error -> {}
     }
 }
 

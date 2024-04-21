@@ -26,7 +26,7 @@ fun provideAuthNetworkModule() = module {
     single { provideLoginApi() }
 
     factory {
-        AuthInterceptor(get())
+        AuthInterceptor(get(), get())
     }
 
 }

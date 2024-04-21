@@ -31,9 +31,9 @@ class NotificationHelper(private val context: Context) {
         createNotificationChannel()
 
         return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("Birthday Reminder")
-            .setContentText("Don't forget about the upcoming birthday!")
+            .setSmallIcon(R.drawable.app_logo)
+            .setContentTitle("Приближается день рождения!")
+            .setContentText("Не забудьте поздравить Хахулина Даниила Константиновича 23 апреля")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
     }

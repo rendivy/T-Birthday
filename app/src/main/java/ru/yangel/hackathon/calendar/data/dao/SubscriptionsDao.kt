@@ -25,4 +25,6 @@ interface SubscriptionsDao {
     @Query("SELECT * FROM personalSubscriptions")
     fun getAllPersonalSubscriptions(): Flow<List<PersonalSubscriptionDto>>
 
+    @Query("SELECT * FROM personalSubscriptions WHERE id=:userId")
+    fun getUserById(userId: String): PersonalSubscriptionDto
 }
