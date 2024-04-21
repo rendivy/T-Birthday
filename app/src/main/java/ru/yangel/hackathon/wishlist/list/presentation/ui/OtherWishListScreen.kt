@@ -34,6 +34,7 @@ import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.yangel.hackathon.R
+import ru.yangel.hackathon.profile.presentation.convertDateFormat
 import ru.yangel.hackathon.ui.common.AppTopBar
 import ru.yangel.hackathon.ui.common.ErrorContent
 import ru.yangel.hackathon.ui.common.LoadingContent
@@ -106,7 +107,7 @@ fun OtherWishListScreen(
                     modifier = Modifier.height(64.dp), verticalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Text(text = "Пользователя", style = Type20, color = Nevada, maxLines = 1)
-                    Text(text = "$name, $birthDate", style = Type20, color = CodGray, maxLines = 1)
+                    Text(text = "$name, ${convertDateFormat(birthDate)}", style = Type20, color = CodGray, maxLines = 1)
                 }
             }
             Spacer(modifier = Modifier.size(24.dp))

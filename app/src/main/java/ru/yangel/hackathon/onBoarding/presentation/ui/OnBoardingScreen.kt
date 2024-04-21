@@ -57,7 +57,7 @@ fun OnBoardingScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
-                .noRippleClickable { navController.navigate("bottomNavigation") },
+                .noRippleClickable { navController.navigate("login") },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {

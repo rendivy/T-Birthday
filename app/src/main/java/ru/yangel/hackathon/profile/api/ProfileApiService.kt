@@ -23,4 +23,6 @@ interface ProfileApiService {
     @DELETE("/api/v1/subscriptions/person/{userId}")
     suspend fun unsubscribe(@Path("userId") userId: String)
 
+
+
 }

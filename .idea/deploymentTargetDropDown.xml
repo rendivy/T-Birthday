@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="LoginScreen">
+        <State />
+      </entry>
       <entry key="OnBoardingScreen">
         <State />
       </entry>
@@ -12,9 +15,6 @@
         <State />
       </entry>
       <entry key="YellowLoader">
-        <State />
-      </entry>
-      <entry key="CalendarScreenPreview">
         <State />
       </entry>
       <entry key="app">
