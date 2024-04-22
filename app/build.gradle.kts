@@ -1,4 +1,5 @@
 plugins {
+    alias(libs.plugins.ksp)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
@@ -50,15 +51,32 @@ android {
 }
 
 dependencies {
+    val work_version = "2.9.0"
+    val room_version = "2.6.1"
     val koinVersion = "3.5.6"
-    val koinComposeVersion = "3.4.1"
+    val navVersion = "2.7.7"
+    val calendarVersion = "2.5.0"
+    val loggingInterceptorVersion = "4.11.0"
+    val securityCryptoVersion = "1.1.0-alpha06"
+    
     val koinCore = "io.insert-koin:koin-core:$koinVersion"
     val koinAndroid = "io.insert-koin:koin-android:$koinVersion"
-    val koinAndroidCompose = "io.insert-koin:koin-androidx-compose:$koinComposeVersion"
+    val koinAndroidCompose = "io.insert-koin:koin-androidx-compose:$koinVersion"
+    val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation("androidx.security:security-crypto:$securityCryptoVersion")
+    implementation("androidx.work:work-runtime-ktx:$work_version")
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    implementation("io.insert-koin:koin-androidx-workmanager:$koinVersion")
+    implementation("com.kizitonwose.calendar:compose:$calendarVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation(koinCore)
     implementation(koinAndroidCompose)
     implementation(koinAndroid)
+    implementation(loggingInterceptor)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -73,4 +91,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation(libs.coil.compose)
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+    implementation(libs.converter.gson)
 }
